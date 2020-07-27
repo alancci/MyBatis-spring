@@ -10,6 +10,17 @@ import java.util.List;
 public class UserDaoImpl extends SqlSessionDaoSupport implements UserMapper {
 
 
+    public int addUser(User user) {
+        UserMapper userMapper = getSqlSession().getMapper(UserMapper.class);
+        return userMapper.addUser(user);
+    }
+
+
+    public int deleteUser(Integer userID) {
+        UserMapper userMapper = getSqlSession().getMapper(UserMapper.class);
+        return userMapper.deleteUser(userID);
+    }
+
     public List<User> queryAllUser() {
         /**
          * @description  Mybais整合实现方式二  直接getSqlSession() 修改配置文件对应的dao 中property 为sqlSessionFactory
@@ -19,9 +30,12 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserMapper {
          * @Exception
          **/
         UserMapper userMapper = getSqlSession().getMapper(UserMapper.class);
-
+        User user = new User(4,"小明","123456");
+        userMapper.addUser(user);
+        userMapper.deleteUser(4);
         return userMapper.queryAllUser();
     }
+
 
 /*
  整合实现方式一

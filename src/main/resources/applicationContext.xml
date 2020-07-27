@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/aop
-       http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+      ">
 
 
     <import resource="spring-dao.xml"/>
@@ -28,4 +32,36 @@
     <bean id="userDao" class="com.project.dao.UserDaoImpl">
         <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
     </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!--配置事务通知-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!--配置哪些方法使用什么样的事务,配置事务的传播特性-->
+            <tx:method name="add" propagation="REQUIRED"/>
+            <tx:method name="delete" propagation="REQUIRED"/>
+            <tx:method name="update" propagation="REQUIRED"/>
+            <tx:method name="search*" propagation="REQUIRED"/>
+            <tx:method name="get" read-only="true"/>
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+    <!--propagation_requierd：如果当前没有事务，就新建一个事务，如果已存在一个事务中，加入到这个事务中，这是最常见的选择。-->
+    <!--propagation_supports：支持当前事务，如果没有当前事务，就以非事务方法执行。-->
+    <!--propagation_mandatory：使用当前事务，如果没有当前事务，就抛出异常。-->
+    <!--propagation_required_new：新建事务，如果当前存在事务，把当前事务挂起。-->
+    <!--propagation_not_supported：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。-->
+    <!--propagation_never：以非事务方式执行操作，如果当前事务存在则抛出异常。-->
+    <!--propagation_nested：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，
+    则执行与propagation_required类似的操作-->
+
+
+    <!--配置aop织入事务-->
+    <aop:config>
+        <aop:pointcut id="txPointcut" expression="execution(* com.project.dao.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+    </aop:config>
 </beans>
