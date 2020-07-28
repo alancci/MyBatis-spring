@@ -39,5 +39,32 @@ public class MyTest {
        List<User> userList = userMapper.queryAllUser();
         System.out.println(userList);
     }
+    @Test
+    public void testsqlsession(){
+        /**
+         * @description 类(或接口)是测试sqlsession sqlsessionFactory 在运行期间一直存在  使用sqlsession xml中
+         * @author  haojiaxing
+         * @date   2020/7/28 15:33
+         **/
+        String resource = "sqlMapConfig.xml";
+        InputStream inputStream = null;
+        try {
+            inputStream = Resources.getResourceAsStream(resource);
+            SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+            SqlSession sqlSession = sqlSessionFactory.openSession();
+//            需要在xml里配置DataSource
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            List<User> userList =  userMapper.queryAllUser();
+            for (User user:userList
+                 ) {
+                System.out.println(user);
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
 }

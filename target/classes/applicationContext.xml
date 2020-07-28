@@ -19,7 +19,7 @@
         <property name="dataSource" ref="dataSource"/>
         <!--关联Mybatis-->
         <property name="configLocation" value="classpath:SqlMapConfig.xml"/>
-        <property name="mapperLocations" value="classpath:com/project/dao/*.xml"/>
+        <!--<property name="mapperLocations" value="classpath:com/project/dao/*.xml"/>-->
     </bean>
     <!--注册sqlSessionTemplate , 关联sqlSessionFactory-->
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
@@ -49,6 +49,15 @@
             <tx:method name="*" propagation="REQUIRED"/>
         </tx:attributes>
     </tx:advice>
+    <!--propagation_requierd：如果当前没有事务，就新建一个事务，如果已存在一个事务中，加入到这个事务中，这是最常见的选择。-->
+    <!--propagation_supports：支持当前事务，如果没有当前事务，就以非事务方法执行。-->
+    <!--propagation_mandatory：使用当前事务，如果没有当前事务，就抛出异常。-->
+    <!--propagation_required_new：新建事务，如果当前存在事务，把当前事务挂起。-->
+    <!--propagation_not_supported：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。-->
+    <!--propagation_never：以非事务方式执行操作，如果当前事务存在则抛出异常。-->
+    <!--propagation_nested：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，
+    则执行与propagation_required类似的操作-->
+
 
     <!--配置aop织入事务-->
     <aop:config>

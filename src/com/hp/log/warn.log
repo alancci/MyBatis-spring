@@ -1,0 +1,2 @@
+2020-07-28 17:05:10 下午 [Thread: main][ Class:com.mchange.v2.resourcepool.BasicResourcePool >> Method: com.mchange.v2.resourcepool.BasicResourcePool.<init>(BasicResourcePool.java:291) ]
+WARN:Bad pool size config, start 3 < min 10. Using 10 as start.

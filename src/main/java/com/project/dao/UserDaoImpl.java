@@ -6,11 +6,23 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
 import java.util.List;
+/**
+ * @description 类(或接口)是
+ * @author  haojiaxing
+ * @date   2020/7/28 16:30
+ **/
 
 public class UserDaoImpl extends SqlSessionDaoSupport implements UserMapper {
 
-
+    /**
+     * @description
+     * @author  haojiaxing
+     * @date   2020/7/28 16:30
+     * @return      int
+     * @Exception
+     **/
     public int addUser(User user) {
+
         UserMapper userMapper = getSqlSession().getMapper(UserMapper.class);
         return userMapper.addUser(user);
     }
