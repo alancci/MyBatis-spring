@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.dao.StudentMapper">
+    <resultMap id="StudentT" type="Student">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <association property="teacher" column="tid" javaType="Teacher" select="getTeacher"/>
+    </resultMap>
+    <!--嵌套子查询效率低   按照查询嵌套查询-->
+    <select id="queryAllStudent" resultMap="StudentT">
+        select ssmbuild.student.id,ssmbuild.student.name,ssmbuild.student.tid from student;
+    </select>
+    <select id="getTeacher" resultType="Teacher">
+        select ssmbuild.teacher.id,ssmbuild.teacher.name from teacher where id = #{id}
+    </select>
+    <!--===================================================-->
+    <!--按照结果嵌套查询-->
+    <resultMap id="StudentT2" type="Student">
+        <id property="id" column="sid"/>
+        <result property="name" column="sname"/>
+        <association property="teacher" javaType="Teacher" >
+            <result property="id" column="tid"/>
+            <result property="name" column="tname"/>
+        </association>
+    </resultMap>
+    <select id="queryAllStudent2" resultMap="StudentT2">
+        select s.id sid,s.name sname,t.id tid,t.name tname from student s,teacher t
+        where  s.tid = tid
+    </select>
+</mapper>

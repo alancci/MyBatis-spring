@@ -11,10 +11,17 @@
     </typeAliases>
 
 
+    <!--这里的数据源环境只是为了测试中引入的SqlMapConfig.xml文件 -->
+    <!--使用了Mybatis-spring后 数据源等Mybatis配置文件在applicationContent.xml中配置即可-->
 
+    <!--关于dataSource 的type-->
+    <!--　如果将类型设置成UNPOOLED，mybaties会为每一个数据库操作创建一个新的连接，并关闭它。该方式适用于只有小规模数量并发用户的简单应用程序上。-->
+    <!--　如果将属性设置成POOLED，mybaties会创建一个数据库连接池，连接池的一个连接将会被用作数据库操作。一旦数据库操作完成，mybaties会将此连接返回给连接池。在开发或测试环境中经常用到此方式。-->
+    <!--　如果将类型设置成JNDI。mybaties会从在应用服务器向配置好的JNDI数据源DataSource获取数据库连接。在生产环境中优先考虑这种方式。-->
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>
+           <!--三种 POOLED 池化  UNPOOLED JNDI-->
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.jdbc.Driver"/>
                 <property name="url" value="jdbc:mysql://localhost:3306/ssmbuild?useSSL=true&amp;useUnicode=true&amp;characterEncoding=utf8"/>
